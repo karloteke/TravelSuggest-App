@@ -13,6 +13,9 @@ builder.Services.AddControllers();
  builder.Services.AddScoped<IUserRepository, UserRepository>();
  builder.Services.AddScoped<IUserService, UserService>();
 
+ //Inyecto dependencia de Destino
+ builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
+ builder.Services.AddScoped<IDestinationService, DestinationService>();
 
 
 builder.Services.AddEndpointsApiExplorer();

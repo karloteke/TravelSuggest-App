@@ -17,6 +17,10 @@ builder.Services.AddControllers();
  builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
  builder.Services.AddScoped<IDestinationService, DestinationService>();
 
+//Inyecto dependencia de sugerencia
+ builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
+ builder.Services.AddScoped<ISuggestionService, SuggestionService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 

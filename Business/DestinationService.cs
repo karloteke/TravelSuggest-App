@@ -28,7 +28,7 @@ namespace TravelSuggest.Business
             }
             else
             {
-                throw new InvalidOperationException("No se pudo encontrar el usuario con el ID proporcionado.");
+                throw new InvalidOperationException("No se pudo encontrar el destino con el ID proporcionado.");
             }
         }
 
@@ -66,7 +66,7 @@ namespace TravelSuggest.Business
             
             if(Destination == null)
             {
-                  throw new KeyNotFoundException($"El paciente con Id {DestinationId} no existe.");
+                  throw new KeyNotFoundException($"El destino con Id {DestinationId} no existe.");
             }
             return Destination;
         }

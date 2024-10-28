@@ -38,14 +38,9 @@ namespace TravelSuggest.Business
             return _repository.GetAllDestinations();
         }
 
-        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters, bool orderByPopularAsc)
+        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters)
         {
-            return _repository.GetAllDestinations(DestinationQueryParameters, orderByPopularAsc);
-        }
-
-        public IEnumerable<Destination> GetDestinationsForUser(DestinationQueryParameters? DestinationUserQueryParameters, bool orderByCategoryAsc)
-        {
-            return _repository.GetDestinationsForUser(DestinationUserQueryParameters, orderByCategoryAsc);
+            return _repository.GetAllDestinations(DestinationQueryParameters);
         }
 
         public User? GetUserById(int userId)

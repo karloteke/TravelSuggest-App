@@ -6,8 +6,7 @@ namespace TravelSuggest.Data
     {
         void AddSuggestion(Suggestion Suggestion);
         List<Suggestion> GetAllSuggestions();
-        public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters, bool orderByPriceAsc);
-        public IEnumerable<Suggestion> GetSuggestionsForDestination(SuggestionQueryParameters? SuggestionQueryParameters, bool orderByRatingAsc);
+        public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters);
         Destination? GetDestinationById(int? destinationId);
         Suggestion GetSuggestionById(int? SuggestionId);
         List<Suggestion> GetSuggestions(int? destinationId);

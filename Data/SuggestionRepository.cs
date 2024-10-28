@@ -1,21 +1,25 @@
 using System.Globalization;
 using System.Text.Json;
 using TravelSuggest.Models;
+using static TravelSuggest.Models.Suggestion;
 
 namespace TravelSuggest.Data
 {
     public class SuggestionRepository :ISuggestionRepository
     {
         private List<Suggestion> _Suggestions = new List<Suggestion>();
-        private List<User> users = new List<User>();
+        private List<User> _users = new List<User>();
+        private List<Destination> _destinations = new List<Destination>();
         private readonly string _filePath;
+        private readonly string _usersFilePath = "users.json"; 
+        private readonly string _destinationsFilePath = "destinations.json"; 
         private readonly IDestinationRepository _destinationRepository;
 
          public SuggestionRepository(IDestinationRepository destinationRepository)
         {
             _destinationRepository = destinationRepository ?? throw new ArgumentNullException(nameof(destinationRepository));
             _filePath = GetFilePath();
-            LoadSuggestions();
+            LoadData();
         }
 
         private string GetFilePath()
@@ -24,51 +28,48 @@ namespace TravelSuggest.Data
             return Path.Combine(basePath, "suggestions.json");
         }
 
-        public void AddSuggestion(Suggestion Suggestion)
+        public void AddSuggestion(Suggestion suggestion)
         {
-            //Verifico si existe el destino en la lista antes de agregarlo
-            if(!_Suggestions.Any(d => d.Id == Suggestion.Id) )
+            if (!_Suggestions.Any(s => s.Id == suggestion.Id)) // Aseguramos de que no exista una sugerencia con el mismo ID
             {
-                _Suggestions.Add(Suggestion);
-                SaveChanges();
+                _Suggestions.Add(suggestion);
+                SaveChanges(); // Guarda los cambios después de añadir la sugerencia
             }
         }
-
-        
-        public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters, bool orderByPriceAsc)
+ 
+        public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? suggestionQueryParameters)
         {
             var query = _Suggestions.AsQueryable();
 
-
-            if (SuggestionQueryParameters?.DestinationId.HasValue == true) // Verificamos si DestinationId tiene un valor
+            // Filtrar por DestinationId
+            if (suggestionQueryParameters?.DestinationId.HasValue == true)
             {
-                query = query.Where(s => s.DestinationId == SuggestionQueryParameters.DestinationId.Value);
+                query = query.Where(s => s.DestinationId == suggestionQueryParameters.DestinationId.Value);
             }
 
-            query = orderByPriceAsc ? query.OrderBy(s => s.Price) : query.OrderByDescending(s => s.Price);
+            // Filtrar por rango de precios
+            if (suggestionQueryParameters?.MinPrice.HasValue == true && suggestionQueryParameters?.MaxPrice.HasValue == true)
+            {
+                query = query.Where(s => s.Price >= suggestionQueryParameters.MinPrice.Value && s.Price <= suggestionQueryParameters.MaxPrice.Value);
+            }
+            else if (suggestionQueryParameters?.MinPrice.HasValue == true)
+            {
+                query = query.Where(s => s.Price >= suggestionQueryParameters.MinPrice.Value);
+            }
+            else if (suggestionQueryParameters?.MaxPrice.HasValue == true)
+            {
+                query = query.Where(s => s.Price <= suggestionQueryParameters.MaxPrice.Value);
+            }
 
-            var result = query.ToList();
-            return result;
+            // Filtrar por puntuación
+            if (suggestionQueryParameters?.Rating.HasValue == true)
+            {
+                query = query.Where(s => s.Rating == suggestionQueryParameters.Rating.Value);
+            }
+
+             return query.ToList(); // Devuelve el resultado final
         }
 
-        public IEnumerable<Suggestion> GetSuggestionsForDestination(SuggestionQueryParameters? SuggestionQueryParameters, bool orderByRatingAsc)
-        {
-            var query = _Suggestions.AsQueryable();
-
-
-            if (SuggestionQueryParameters.DestinationId.HasValue && SuggestionQueryParameters.DestinationId > 0)
-            {
-                query = query.Where(s => s.DestinationId == SuggestionQueryParameters.DestinationId);
-            }
-
-            if (orderByRatingAsc)
-            {
-                 query = query.OrderBy(s => s.Rating);
-            }
-         
-            var result = query.ToList();
-            return result;
-        }
 
         public List<Suggestion> GetAllSuggestions()
         {
@@ -87,7 +88,6 @@ namespace TravelSuggest.Data
 
         public List<Suggestion> GetSuggestions(int? destinationId)
         {
-            // Implementación para obtener todas los destinos asociados a un usuario por su Id
             return _Suggestions.Where(d => d.DestinationId == destinationId).ToList();
         }
 
@@ -104,6 +104,55 @@ namespace TravelSuggest.Data
             }
         }
 
+        private void LoadData()
+        {
+            LoadUsers();
+            LoadDestinations();
+            LoadSuggestions();
+        }
+
+        private void LoadUsers()
+        {
+            if (File.Exists(_usersFilePath))
+            {
+                string jsonString = File.ReadAllText(_usersFilePath);
+                _users = JsonSerializer.Deserialize<List<User>>(jsonString) ?? new List<User>();
+            }
+        }
+
+        private void LoadDestinations()
+        {
+            if (File.Exists(_destinationsFilePath))
+            {
+                string jsonString = File.ReadAllText(_destinationsFilePath);
+                _destinations = JsonSerializer.Deserialize<List<Destination>>(jsonString) ?? new List<Destination>();
+            }
+        }
+
+        private void LoadSuggestions()
+        {
+            if (File.Exists(_filePath))
+            {
+                string jsonString = File.ReadAllText(_filePath);
+                var suggestions = JsonSerializer.Deserialize<List<Suggestion>>(jsonString);
+                _Suggestions = suggestions ?? new List<Suggestion>();
+
+                // Asociar User y Destination para cada Suggestion
+                foreach (var suggestion in _Suggestions)
+                {
+                    // Obtener el usuario por UserId y asignar Id y UserName
+                    var user = _users.FirstOrDefault(u => u.Id == suggestion.UserId);
+                    if (user != null)
+                    {
+                        suggestion.User = new UserPreview { UserName = user.UserName, Id = user.Id }; 
+                    }
+
+                    // Obtener el destino por DestinationId y asignarlo
+                    suggestion.Destination = _destinations.FirstOrDefault(d => d.Id == suggestion.DestinationId);
+                }
+            }
+        }
+
         public void UpdateSuggestion(Suggestion Suggestion)
         {
             AddSuggestion(Suggestion);
@@ -114,22 +163,6 @@ namespace TravelSuggest.Data
             var options = new JsonSerializerOptions { WriteIndented = true };
             string jsonString = JsonSerializer.Serialize(_Suggestions, options);
             File.WriteAllText(_filePath, jsonString);
-        }
-
-        private void LoadSuggestions()
-        {
-            if (File.Exists(_filePath))
-            {
-                string jsonString = File.ReadAllText(_filePath);
-                var Suggestions = JsonSerializer.Deserialize<List<Suggestion>>(jsonString);
-                _Suggestions = Suggestions ?? new List<Suggestion>();
-            }
-
-            if (_Suggestions.Any())
-            {
-                // int maxId = _Suggestions.Max(a => a.Id);
-                // Suggestion.UpdateNextSuggestionId(maxId + 1);
-            }
         }
     }
 }

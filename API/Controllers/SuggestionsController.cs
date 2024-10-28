@@ -24,13 +24,13 @@ public class SuggestionController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllSuggestion")] 
-    public ActionResult<IEnumerable<Suggestion>> GetAllSuggestion([FromQuery] SuggestionQueryParameters suggestionQueryParameters, bool orderByPriceAsc)
+    public ActionResult<IEnumerable<Suggestion>> GetAllSuggestion([FromQuery] SuggestionQueryParameters suggestionQueryParameters)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            var suggestion = _suggestionService.GetAllSuggestions(suggestionQueryParameters, orderByPriceAsc);
+            var suggestion = _suggestionService.GetAllSuggestions(suggestionQueryParameters);
             
                 if (suggestion == null || !suggestion.Any())
                     {

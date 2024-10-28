@@ -25,14 +25,14 @@ public class UserController : ControllerBase
 
         try 
         {
-            var patients = _userService.GetAllUsers(userQueryParameters);
+            var users = _userService.GetAllUsers(userQueryParameters);
             
-                if (patients == null || !patients.Any())
+                if (users == null || !users.Any())
                     {
                         return NotFound("No hay usuarios disponibles.");
                     }
                     
-            return Ok(patients);
+            return Ok(users);
         }     
         catch (Exception ex)
         {

@@ -21,13 +21,13 @@ public class DestinationController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllDestination")] 
-    public ActionResult<IEnumerable<Destination>> GetAllDestination([FromQuery] DestinationQueryParameters DestinationQueryParameters, bool orderIsPopularAsc)
+    public ActionResult<IEnumerable<Destination>> GetAllDestination([FromQuery] DestinationQueryParameters DestinationQueryParameters)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            var Destination = _destinationService.GetAllDestinations(DestinationQueryParameters, orderIsPopularAsc);
+            var Destination = _destinationService.GetAllDestinations(DestinationQueryParameters);
             
                 if (Destination == null || !Destination.Any())
                     {

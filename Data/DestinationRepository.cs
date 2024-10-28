@@ -34,54 +34,41 @@ namespace TravelSuggest.Data
             }
         }
 
-        
-        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters, bool orderByPopularAsc)
+        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? destinationQueryParameters)
         {
             var query = _destinations.AsQueryable();
 
-
-            if (!string.IsNullOrWhiteSpace(DestinationQueryParameters.CityName)) 
+            // Filtrar por nombre del destino
+            if (!string.IsNullOrWhiteSpace(destinationQueryParameters?.CityName))
             {
-            query = query.Where(d => d.CityName.Contains(DestinationQueryParameters.CityName));
+                query = query.Where(d => d.CityName != null && d.CityName.Contains(destinationQueryParameters.CityName));
             }
 
-            if (!string.IsNullOrWhiteSpace(DestinationQueryParameters.Season)) 
+            // Filtrar por estación del año
+            if (!string.IsNullOrWhiteSpace(destinationQueryParameters?.Season))
             {
-            query = query.Where(d => d.Season.Contains(DestinationQueryParameters.Season));
+                query = query.Where(d => d.Season !=null && d.Season.Contains(destinationQueryParameters.Season));
             }
 
-            if (DestinationQueryParameters?.UserId.HasValue == true) // Verificamos si UserId tiene un valor
+            // Filtrar por categoria
+            if (!string.IsNullOrWhiteSpace(destinationQueryParameters?.Category))
             {
-                query = query.Where(d => d.UserId == DestinationQueryParameters.UserId.Value);
+                query = query.Where(d => d.Category !=null && d.Category.Contains(destinationQueryParameters.Category));
             }
 
-            if (orderByPopularAsc) 
+            // Filtrar por UserId
+            if (destinationQueryParameters?.UserId.HasValue == true)
             {
-                query = query.OrderByDescending(d => d.IsPopular);
-            }
-            
-
-            var result = query.ToList();
-            return result;
-        }
-
-        public IEnumerable<Destination> GetDestinationsForUser(DestinationQueryParameters? DestinationQueryParameters, bool orderByCategoryAsc)
-        {
-            var query = _destinations.AsQueryable();
-
-
-            if (DestinationQueryParameters.UserId.HasValue && DestinationQueryParameters.UserId > 0)
-            {
-                query = query.Where(d => d.UserId == DestinationQueryParameters.UserId);
+                query = query.Where(d => d.UserId == destinationQueryParameters.UserId.Value);
             }
 
-            if (orderByCategoryAsc)
+            // Filtrar por popularidad
+            if (destinationQueryParameters?.IsPopular.HasValue == true)
             {
-                 query = query.OrderBy(d => d.Category);
+                query = query.Where(d => d.IsPopular == destinationQueryParameters.IsPopular.Value);
             }
-         
-            var result = query.ToList();
-            return result;
+
+            return query.ToList();
         }
 
         public List<Destination> GetAllDestinations()

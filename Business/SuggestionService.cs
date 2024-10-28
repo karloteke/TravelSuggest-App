@@ -32,20 +32,14 @@ namespace TravelSuggest.Business
             }
         }
 
-
         public List<Suggestion> GetAllSuggestions()
         {
             return _repository.GetAllSuggestions();
         }
 
-        public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters, bool orderByPriceAsc)
+        public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters)
         {
-            return _repository.GetAllSuggestions(SuggestionQueryParameters, orderByPriceAsc);
-        }
-
-        public IEnumerable<Suggestion> GetSuggestionsForUser(SuggestionQueryParameters? SuggestionUserQueryParameters, bool orderByRatingAsc)
-        {
-            return _repository.GetSuggestionsForDestination(SuggestionUserQueryParameters, orderByRatingAsc);
+            return _repository.GetAllSuggestions(SuggestionQueryParameters);
         }
 
         public Destination? GetDestinationById(int destinationId)
@@ -58,7 +52,6 @@ namespace TravelSuggest.Business
             }
             return Destination;
         }
-
 
         public Suggestion GetSuggestionById(int SuggestionId)
         {

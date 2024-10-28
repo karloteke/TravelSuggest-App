@@ -7,8 +7,6 @@ namespace TravelSuggest.Models
         public string? Password { get; set; }
         public string? Email { get; set; }
 
-
-
         private static int NextUserId = 1;
 
         // Constructor sin parámetros requerido para la deserialización

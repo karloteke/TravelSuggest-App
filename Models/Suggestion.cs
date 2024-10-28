@@ -9,8 +9,14 @@ public class Suggestion
     public DateTime Created_at { get; set; } = DateTime.Now;
     public int? UserId { get; set; }
     public int? DestinationId { get; set; } 
-    // public User User { get; set; }
-    // public Destination Destination { get; set; } 
+    public UserPreview User { get; set; } // Incluye Id / UserName
+    public Destination Destination { get; set; } 
+
+    public class UserPreview
+    {
+        public int Id { get; set; }
+        public string? UserName { get; set; } 
+    }
 
     // Constructor sin parámetros
     public Suggestion() { }

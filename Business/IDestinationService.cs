@@ -8,8 +8,7 @@ namespace TravelSuggest.Business
         void CreateDestination(string CityName, string description, string season, bool isPopular, string category, int userId);  
         List<Destination> GetAllDestinations();
         public User GetUserById(int userId);
-        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters, bool orderByPopularAsc);
-        public IEnumerable<Destination> GetDestinationsForUser(DestinationQueryParameters? DestinationQueryParameters, bool orderByCategoryAsc);
+        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters);
         Destination GetDestinationById(int DestinationId);
         List<Destination> GetDestinations(int userId);
         public void UpdateDestinationDetails(int DestinationId, DestinationUpdateDTO DestinationUpdateDTO);

@@ -6,8 +6,7 @@ namespace TravelSuggest.Data
     {
         void AddDestination(Destination Destination);
         List<Destination> GetAllDestinations();
-        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters, bool orderByPopularAsc);
-        public IEnumerable<Destination> GetDestinationsForUser(DestinationQueryParameters? DestinationQueryParameters, bool orderByCategoryAsc);
+        public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters);
         User? GetUserById(int? userId);
         Destination GetDestinationById(int DestinationId);
         List<Destination> GetDestinations(int? userId);

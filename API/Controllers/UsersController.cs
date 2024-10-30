@@ -82,6 +82,7 @@ public class UserController : ControllerBase
 
             // Retornar la acción exitosa junto con el nuevo usuario creado
             return CreatedAtAction(nameof(GetAllUsers), new { userId = user.Id }, userDto);
+    
         }     
         catch (Exception ex)
         {

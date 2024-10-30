@@ -14,10 +14,12 @@ namespace TravelSuggest.Data
         private readonly string _usersFilePath = "users.json"; 
         private readonly string _destinationsFilePath = "destinations.json"; 
         private readonly IDestinationRepository _destinationRepository;
+        private readonly IUserRepository _userRepository;
 
-         public SuggestionRepository(IDestinationRepository destinationRepository)
+         public SuggestionRepository(IDestinationRepository destinationRepository, IUserRepository userRepository)
         {
             _destinationRepository = destinationRepository ?? throw new ArgumentNullException(nameof(destinationRepository));
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _filePath = GetFilePath();
             LoadData();
         }
@@ -28,15 +30,39 @@ namespace TravelSuggest.Data
             return Path.Combine(basePath, "suggestions.json");
         }
 
-        public void AddSuggestion(Suggestion suggestion)
+       public void AddSuggestion(Suggestion suggestion, int userId)
         {
-            if (!_Suggestions.Any(s => s.Id == suggestion.Id)) // Aseguramos de que no exista una sugerencia con el mismo ID
+            // Verifica que el DestinationId no sea null
+            if (suggestion.DestinationId.HasValue)
             {
-                _Suggestions.Add(suggestion);
-                SaveChanges(); // Guarda los cambios después de añadir la sugerencia
+                // Verifica que el destino exista antes de continuar
+                var destination = _destinationRepository.GetDestinationById(suggestion.DestinationId.Value); 
+                if (destination == null)
+                {
+                    throw new InvalidOperationException("El destino no existe.");
+                }
+
+                // Verifica si una sugerencia similar ya existe para el mismo destino y usuario--- REVISAR SI ES LO QUE QUIERO----
+                if (!_Suggestions.Any(s => s.DestinationId == suggestion.DestinationId.Value && s.UserId == userId))
+                {
+                    suggestion.UserId = userId;
+                    _Suggestions.Add(suggestion);
+                    SaveChanges();
+
+                    var user = _userRepository.GetUserById(userId);
+                    if (user != null)
+                    {
+                        user.AddPoints(50); //Sumamos 50 puntos al crear la sugerencia
+                        _userRepository.SaveChanges();
+                    }
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("El DestinationId no puede ser nulo.");
             }
         }
- 
+
         public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? suggestionQueryParameters)
         {
             var query = _Suggestions.AsQueryable();
@@ -67,7 +93,7 @@ namespace TravelSuggest.Data
                 query = query.Where(s => s.Rating == suggestionQueryParameters.Rating.Value);
             }
 
-             return query.ToList(); // Devuelve el resultado final
+             return query.ToList(); 
         }
 
 
@@ -91,18 +117,26 @@ namespace TravelSuggest.Data
             return _Suggestions.Where(d => d.DestinationId == destinationId).ToList();
         }
 
-        public void DeleteSuggestion(int? SuggestionId)
+        public void DeleteSuggestion(int? suggestionId)
         {
-            if (SuggestionId != null)
+            if (suggestionId != null)
             {
-                var Suggestion = _Suggestions.FirstOrDefault(d => d.Id == SuggestionId);
-                if (Suggestion != null)
+                var suggestion = _Suggestions.FirstOrDefault(s => s.Id == suggestionId);
+                if (suggestion != null)
                 {
-                    _Suggestions.Remove(Suggestion);
+                    var user = _userRepository.GetUserById(suggestion.UserId); 
+                    if (user != null)
+                    {
+                        user.DeductPoints(50); // Resta 50 puntos al eliminar la sugerencia
+                        _userRepository.SaveChanges(); 
+                    }
+
+                    _Suggestions.Remove(suggestion);
                     SaveChanges();
                 }
             }
         }
+
 
         private void LoadData()
         {
@@ -129,6 +163,30 @@ namespace TravelSuggest.Data
             }
         }
 
+        // private void LoadSuggestions()
+        // {
+        //     if (File.Exists(_filePath))
+        //     {
+        //         string jsonString = File.ReadAllText(_filePath);
+        //         var suggestions = JsonSerializer.Deserialize<List<Suggestion>>(jsonString);
+        //         _Suggestions = suggestions ?? new List<Suggestion>();
+
+        //         // Asociar User y Destination para cada Suggestion
+        //         foreach (var suggestion in _Suggestions)
+        //         {
+        //             // Obtener el usuario por UserId y asignar Id y UserName
+        //             var user = _users.FirstOrDefault(u => u.Id == suggestion.UserId);
+        //             if (user != null)
+        //             {
+        //                 suggestion.User = new UserPreview { UserName = user.UserName, Id = user.Id }; 
+        //             }
+
+        //             // Obtener el destino por DestinationId y asignarlo
+        //             suggestion.Destination = _destinations.FirstOrDefault(d => d.Id == suggestion.DestinationId);
+        //         }
+        //     }
+        // }
+
         private void LoadSuggestions()
         {
             if (File.Exists(_filePath))
@@ -140,22 +198,22 @@ namespace TravelSuggest.Data
                 // Asociar User y Destination para cada Suggestion
                 foreach (var suggestion in _Suggestions)
                 {
-                    // Obtener el usuario por UserId y asignar Id y UserName
+                    // Obtener el usuario por UserId y asignar UserName e Id
                     var user = _users.FirstOrDefault(u => u.Id == suggestion.UserId);
                     if (user != null)
                     {
                         suggestion.User = new UserPreview { UserName = user.UserName, Id = user.Id }; 
                     }
 
-                    // Obtener el destino por DestinationId y asignarlo
+                    // Obtener el destino por DestinationId y asignarlo sin reemplazar UserId
                     suggestion.Destination = _destinations.FirstOrDefault(d => d.Id == suggestion.DestinationId);
                 }
             }
         }
 
-        public void UpdateSuggestion(Suggestion Suggestion)
+        public void UpdateSuggestion(Suggestion Suggestion, int userId)
         {
-            AddSuggestion(Suggestion);
+            AddSuggestion(Suggestion, userId);
         }
 
         public void SaveChanges()

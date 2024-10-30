@@ -1,6 +1,8 @@
 namespace TravelSuggest.Models;
 public class Suggestion
 {
+    // public readonly object CityName;
+
     public int Id { get; set;} 
     public string? Title { get; set;}
     public string? Description { get; set;}
@@ -8,8 +10,8 @@ public class Suggestion
     public int? Rating { get; set; }
     public DateTime Created_at { get; set; } = DateTime.Now;
     public int? UserId { get; set; }
-    public int? DestinationId { get; set; } 
-    public UserPreview User { get; set; } // Incluye Id / UserName
+    public int? DestinationId { get; set; }
+    public UserPreview User { get; set; } 
     public Destination Destination { get; set; } 
 
     public class UserPreview

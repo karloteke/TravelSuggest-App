@@ -15,22 +15,24 @@ namespace TravelSuggest.Business
 
         public void CreateSuggestion(string title, string description, decimal price, int rating, DateTime created_at, int destinationId, int userId)
         {
-
+            // Verificar si el destino existe
             var destination = _repository.GetDestinationById(destinationId);
 
-            if (destination != null)
-            { 
-               
-                var suggestion = new Suggestion(title, description, price, rating, created_at, destinationId, userId);
-
-                _repository.AddSuggestion(suggestion);
-                _repository.SaveChanges();
-            }
-            else
+            // Si el destino no existe, lanzamos una excepción
+            if (destination == null)
             {
-                throw new InvalidOperationException("No se pudo encontrar la sugerencia con el ID proporcionado.");
+                throw new InvalidOperationException($"El destino con ID {destinationId} no existe.");
+
             }
+
+            // Crear la sugerencia ya que el destino existe
+            var suggestion = new Suggestion(title, description, price, rating, created_at, userId, destinationId);
+
+            // Agregar la sugerencia al repositorio
+            _repository.AddSuggestion(suggestion, userId);
+            _repository.SaveChanges(); 
         }
+
 
         public List<Suggestion> GetAllSuggestions()
         {
@@ -76,20 +78,20 @@ namespace TravelSuggest.Business
             return Suggestions;
         }
 
-        public void UpdateSuggestionDetails(int SuggestionId, SuggestionUpdateDTO SuggestionUpdate)
+        public void UpdateSuggestionDetails(int suggestionId, SuggestionUpdateDTO suggestionUpdate)
         {
-            var Suggestion = _repository.GetSuggestionById(SuggestionId);
+            var suggestion = _repository.GetSuggestionById(suggestionId);
 
-            if (Suggestion == null)
+            if (suggestion == null)
             {
-                throw new KeyNotFoundException($"La sugerencia con id: {SuggestionId} no existe.");
+                throw new KeyNotFoundException($"La sugerencia con id: {suggestionId} no existe.");
             }
 
-            Suggestion.Title = SuggestionUpdate.Title;
-            Suggestion.Description = SuggestionUpdate.Description;
-            Suggestion.Price = SuggestionUpdate.Price;
-            Suggestion.Rating = SuggestionUpdate.Rating;
-            _repository.UpdateSuggestion(Suggestion);
+            suggestion.Title = suggestionUpdate.Title;
+            suggestion.Description = suggestionUpdate.Description;
+            suggestion.Price = suggestionUpdate.Price;
+            suggestion.Rating = suggestionUpdate.Rating;
+            _repository.UpdateSuggestion(suggestion, suggestionId );
             _repository.SaveChanges();
         }
 

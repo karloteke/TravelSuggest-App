@@ -78,17 +78,25 @@ public class SuggestionController : ControllerBase
                 return BadRequest("El precio no puede ser nulo.");
             }
 
-             // ID de usuario estático para pruebas
-            int userId = 1;
-
             // Verifica si el destino existe
             var destination = _destinationService.GetDestinationById(destinationId);
             if (destination == null)
             {
                 return NotFound("El ID de destino no existe.");
             }
-            _suggestionService.CreateSuggestion(suggestionDto.Title, suggestionDto.Description, suggestionDto.Price.Value, suggestionDto.Rating, DateTime.UtcNow, destinationId, userId);
-            return Ok(new { message = $"Se ha creado correctamente la sugerencia para el destino con Id: {destinationId}" });
+
+            // UserId del DTO
+            _suggestionService.CreateSuggestion(
+                suggestionDto.Title,
+                suggestionDto.Description,
+                suggestionDto.Price.Value,
+                suggestionDto.Rating,
+                DateTime.UtcNow,
+                destinationId,
+                suggestionDto.UserId 
+            );
+
+            return Ok($"Se ha creado correctamente la sugerencia para el destino con Id: {destinationId}");
         }     
         catch (Exception ex)
         {

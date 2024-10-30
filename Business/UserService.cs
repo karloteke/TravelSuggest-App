@@ -77,6 +77,11 @@ namespace TravelSuggest.Business
             }
              _repository.DeleteUser(userId);         
         }
+
+        public void SaveUser(User user)
+        {
+            _repository.UpdateUser(user); 
+        }
     
         public User Authenticate(string userName, string password)
         {

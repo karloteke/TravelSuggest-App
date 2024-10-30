@@ -6,6 +6,17 @@ namespace TravelSuggest.Models
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
+        public int Points { get; set; }
+
+         public void AddPoints(int points)
+        {
+            Points += points; // Sumar puntos al usuario
+        }
+
+        public void DeductPoints(int points)
+        {
+            Points = Math.Max(0, Points - points); // Restar puntos sin permitir que se vuelva negativo
+        }
 
         private static int NextUserId = 1;
 
@@ -21,6 +32,7 @@ namespace TravelSuggest.Models
             UserName = userName;
             Password = password;
             Email = email;
+            Points = 100;
         }
 
          public static void UpdateNextUserId(int nextId)

@@ -14,5 +14,6 @@ namespace TravelSuggest.Business
         User? GetUserById(int userId);
         public void UpdateUserDetails(int userId, UserUpdateDTO UserUpdate);
         public void DeleteUser(int userId);
+        void SaveUser(User user);
     }
 }

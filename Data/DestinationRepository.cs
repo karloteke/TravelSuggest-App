@@ -24,16 +24,24 @@ namespace TravelSuggest.Data
             return Path.Combine(basePath, "destinations.json");
         }
 
-        public void AddDestination(Destination Destination)
+        public void AddDestination(Destination destination, int userId)
         {
-            //Verifico si existe el destino en la lista antes de agregarlo
-            if(!_destinations.Any(d => d.Id == Destination.Id) )
+            // Verificar si existe el destino en la lista antes de agregarlo
+            if (!_destinations.Any(d => d.Id == destination.Id))
             {
-                _destinations.Add(Destination);
+                _destinations.Add(destination);
                 SaveChanges();
+
+                var user = _userRepository.GetUserById(userId);
+                if (user != null)
+                {
+                    user.AddPoints(150); // Asigna 150 puntos por crear un nuevo destino
+                    _userRepository.SaveChanges(); 
+                }
             }
         }
 
+    
         public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? destinationQueryParameters)
         {
             var query = _destinations.AsQueryable();
@@ -81,9 +89,10 @@ namespace TravelSuggest.Data
             return _userRepository.GetUserById(userId);
         }
 
-        public Destination GetDestinationById(int DestinationId)
+        public Destination GetDestinationById(int destinationId)
         {
-            return _destinations.FirstOrDefault(d => d.Id == DestinationId);
+            var destination = _destinations.FirstOrDefault(d => d.Id == destinationId);
+            return destination;
         }
 
         public List<Destination> GetDestinations(int? userId)
@@ -92,22 +101,30 @@ namespace TravelSuggest.Data
             return _destinations.Where(du => du.UserId == userId).ToList();
         }
 
-        public void DeleteDestination(int? DestinationId)
+        public void DeleteDestination(int? destinationId)
         {
-            if (DestinationId != null)
+            if (destinationId != null)
             {
-                var Destination = _destinations.FirstOrDefault(d => d.Id == DestinationId);
-                if (Destination != null)
+                var destination = _destinations.FirstOrDefault(d => d.Id == destinationId);
+                if (destination != null)
                 {
-                    _destinations.Remove(Destination);
+                    // Restar puntos al usuario
+                    var user = _userRepository.GetUserById(destination.UserId); 
+                    if (user != null)
+                    {
+                        user.DeductPoints(150); // Resta 150 puntos al eliminar el destino
+                        _userRepository.SaveChanges(); 
+                    }
+
+                    _destinations.Remove(destination);
                     SaveChanges();
                 }
             }
         }
 
-        public void UpdateDestination(Destination Destination)
+        public void UpdateDestination(Destination destination, int userId)
         {
-            AddDestination(Destination);
+            AddDestination(destination, userId);
         }
 
         public void SaveChanges()
@@ -117,20 +134,53 @@ namespace TravelSuggest.Data
             File.WriteAllText(_filePath, jsonString);
         }
 
+        // private void LoadDestinations()
+        // {
+        //     if (File.Exists(_filePath))
+        //     {
+        //         string jsonString = File.ReadAllText(_filePath);
+        //         var Destinations = JsonSerializer.Deserialize<List<Destination>>(jsonString);
+        //         _destinations = Destinations ?? new List<Destination>();
+        //     }
+
+        //     if (_destinations.Any())
+        //     {
+        //         // int maxId = _Destinations.Max(a => a.Id);
+        //         // Destination.UpdateNextDestinationId(maxId + 1);
+        //     }
+        // }
+
         private void LoadDestinations()
         {
             if (File.Exists(_filePath))
             {
-                string jsonString = File.ReadAllText(_filePath);
-                var Destinations = JsonSerializer.Deserialize<List<Destination>>(jsonString);
-                _destinations = Destinations ?? new List<Destination>();
+                try
+                {
+                    string jsonString = File.ReadAllText(_filePath);
+                    var loadedDestinations = JsonSerializer.Deserialize<List<Destination>>(jsonString);
+
+                    _destinations = loadedDestinations ?? new List<Destination>();
+                    Console.WriteLine($"Cargados {_destinations.Count} destinos desde {_filePath}.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al cargar destinos desde el archivo: {ex.Message}");
+                    _destinations = new List<Destination>(); 
+                }
+            }
+            else
+            {
+                Console.WriteLine($"El archivo {_filePath} no existe. Se inicializa una lista vacía de destinos.");
+                _destinations = new List<Destination>();
             }
 
             if (_destinations.Any())
             {
-                // int maxId = _Destinations.Max(a => a.Id);
+                // Calcular el ID máximo
+                // int maxId = _destinations.Max(a => a.Id);
                 // Destination.UpdateNextDestinationId(maxId + 1);
             }
         }
+
     }
 }

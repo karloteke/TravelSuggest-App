@@ -25,6 +25,7 @@ namespace TravelSuggest.Data
             // Verifica si ya existe el usuario en la lista antes de agregarlo
             if (!_users.Any(u => u.UserName == user.UserName))
             {
+                // user.Points = 100; // Asignar 100 puntos al registrarse
                 _users.Add(user);
                 SaveChanges();
             }
@@ -35,18 +36,18 @@ namespace TravelSuggest.Data
             return _users;
         }
 
-        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters) {
-        var query = _users.AsQueryable();
-
-        
-        if (!string.IsNullOrWhiteSpace(userQueryParameters.UserName)) 
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters) 
         {
-            query = query.Where(u => u.UserName.Contains(userQueryParameters.UserName));
-        }
+            var query = _users.AsQueryable();
 
-        var result = query.ToList();
-        return result;
-    }
+            
+            if (!string.IsNullOrWhiteSpace(userQueryParameters.UserName)) 
+            {
+                query = query.Where(u => u.UserName.Contains(userQueryParameters.UserName));
+            }
+
+            return query.ToList();
+        }
 
         public User? GetUserByUserName(string userName)
         {
@@ -65,7 +66,16 @@ namespace TravelSuggest.Data
 
         public void UpdateUser(User user)
         {
-            AddUser(user);
+            // Actualiza el usuario existente
+            var existingUser = GetUserById(user.Id);
+            if (existingUser != null)
+            {
+                existingUser.UserName = user.UserName;
+                existingUser.Password = user.Password;
+                existingUser.Email = user.Email;
+                existingUser.Points = user.Points; // Actualizar puntos 
+                SaveChanges();
+            }
         }
 
         public void DeleteUser(int userId)
@@ -103,6 +113,6 @@ namespace TravelSuggest.Data
                 }  
             }
         }
-
     }
 }
+

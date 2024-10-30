@@ -22,8 +22,7 @@ namespace TravelSuggest.Business
             { 
                
                 var destination = new Destination(cityName, description, season, isPopular, category, userId);
-
-                _repository.AddDestination(destination);
+                _repository.AddDestination(destination, userId);
                 _repository.SaveChanges();
             }
             else
@@ -55,16 +54,31 @@ namespace TravelSuggest.Business
         }
 
 
-        public Destination GetDestinationById(int DestinationId)
-        {
-            var Destination = _repository.GetDestinationById(DestinationId);
+        // public Destination GetDestinationById(int DestinationId)
+        // {
+        //     var Destination = _repository.GetDestinationById(DestinationId);
             
-            if(Destination == null)
+        //     if(Destination == null)
+        //     {
+        //           throw new KeyNotFoundException($"El destino con Id {DestinationId} no existe.");
+        //     }
+        //     return Destination;
+        // }
+        public Destination GetDestinationById(int destinationId)
+        {
+            var destinations = _repository.GetAllDestinations();
+
+            // Busca el destino por ID
+            var destination = destinations.FirstOrDefault(d => d.Id == destinationId);
+            
+            if (destination == null)
             {
-                  throw new KeyNotFoundException($"El destino con Id {DestinationId} no existe.");
+                throw new KeyNotFoundException($"El destino con ID {destinationId} no existe.");
             }
-            return Destination;
+            
+            return destination;
         }
+
 
         public List<Destination> GetDestinations(int userId)
         {
@@ -78,21 +92,22 @@ namespace TravelSuggest.Business
             return Destinations;
         }
 
-        public void UpdateDestinationDetails(int DestinationId, DestinationUpdateDTO DestinationUpdate)
+        public void UpdateDestinationDetails(int destinationId, DestinationUpdateDTO destinationUpdate)
         {
-            var Destination = _repository.GetDestinationById(DestinationId);
+            var destination = _repository.GetDestinationById(destinationId);
 
-            if (Destination == null)
+            if (destination == null)
             {
-                throw new KeyNotFoundException($"El destino con id: {DestinationId} no existe.");
+                throw new KeyNotFoundException($"El destino con id: {destinationId} no existe.");
             }
 
-            Destination.CityName = DestinationUpdate.CityName;
-            Destination.Description = DestinationUpdate.Description;
-            Destination.Season = DestinationUpdate.Season;
-            Destination.IsPopular = DestinationUpdate.IsPopular ?? false;
-            Destination.Category = DestinationUpdate.Category;
-            _repository.UpdateDestination(Destination);
+            // Actualizar las propiedades del destino
+            destination.CityName = destinationUpdate.CityName;
+            destination.Description = destinationUpdate.Description;
+            destination.Season = destinationUpdate.Season;
+            destination.IsPopular = destinationUpdate.IsPopular ?? false;
+            destination.Category = destinationUpdate.Category;
+            _repository.UpdateDestination(destination, destination.UserId ?? 0);
             _repository.SaveChanges();
         }
 

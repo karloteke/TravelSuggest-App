@@ -1,5 +1,6 @@
 
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using TravelSuggest.Business;
 using TravelSuggest.Data;
 
@@ -13,13 +14,32 @@ builder.Services.AddControllers();
  builder.Services.AddScoped<IUserRepository, UserRepository>();
  builder.Services.AddScoped<IUserService, UserService>();
 
+//Inyecto UserEF
+ builder.Services.AddScoped<IUserRepository, UserEFRepository>();
+
  //Inyecto dependencia de Destino
  builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
  builder.Services.AddScoped<IDestinationService, DestinationService>();
 
+//Inyecto DestinationEF
+ builder.Services.AddScoped<IDestinationRepository, DestinationEFRepository>();
+
 //Inyecto dependencia de sugerencia
  builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
  builder.Services.AddScoped<ISuggestionService, SuggestionService>();
+
+ //Inyecto SuggestionEF
+ builder.Services.AddScoped<ISuggestionRepository, SuggestionEFRepository>();
+
+
+ // Cadena de conexión BBDD
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+// var connectionString = builder.Configuration.GetConnectionString("ServerAzure");
+// var connectionString = builder.Configuration.GetConnectionString("ServerDB");
+
+builder.Services.AddDbContext<TravelSuggestContext>(options =>
+    options.UseSqlServer(connectionString)
+);
 
 
 builder.Services.AddEndpointsApiExplorer();

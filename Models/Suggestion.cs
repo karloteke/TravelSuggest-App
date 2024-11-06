@@ -1,24 +1,27 @@
 namespace TravelSuggest.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 public class Suggestion
 {
-    // public readonly object CityName;
-
-    public int Id { get; set;} 
-    public string? Title { get; set;}
-    public string? Description { get; set;}
+    [Key]
+    public int Id { get; set;}
+    [Required] 
+    public string Title { get; set;} = string.Empty;
+    [Required] 
+    public string Description { get; set;} = string.Empty;
+    [Required] 
     public decimal? Price { get; set;}
+    [Required] 
     public int? Rating { get; set; }
     public DateTime Created_at { get; set; } = DateTime.Now;
+    
+    [ForeignKey("User")]
     public int? UserId { get; set; }
+    [ForeignKey("Destination")]
     public int? DestinationId { get; set; }
-    public UserPreview User { get; set; } 
+    
+    public UserPreviewDTO? User { get; set; }
     public Destination Destination { get; set; } 
-
-    public class UserPreview
-    {
-        public int Id { get; set; }
-        public string? UserName { get; set; } 
-    }
 
     // Constructor sin parámetros
     public Suggestion() { }

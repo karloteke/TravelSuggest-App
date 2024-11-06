@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using TravelSuggest.Models;
-using static TravelSuggest.Models.Suggestion;
+
 
 namespace TravelSuggest.Data
 {
@@ -163,30 +163,6 @@ namespace TravelSuggest.Data
             }
         }
 
-        // private void LoadSuggestions()
-        // {
-        //     if (File.Exists(_filePath))
-        //     {
-        //         string jsonString = File.ReadAllText(_filePath);
-        //         var suggestions = JsonSerializer.Deserialize<List<Suggestion>>(jsonString);
-        //         _Suggestions = suggestions ?? new List<Suggestion>();
-
-        //         // Asociar User y Destination para cada Suggestion
-        //         foreach (var suggestion in _Suggestions)
-        //         {
-        //             // Obtener el usuario por UserId y asignar Id y UserName
-        //             var user = _users.FirstOrDefault(u => u.Id == suggestion.UserId);
-        //             if (user != null)
-        //             {
-        //                 suggestion.User = new UserPreview { UserName = user.UserName, Id = user.Id }; 
-        //             }
-
-        //             // Obtener el destino por DestinationId y asignarlo
-        //             suggestion.Destination = _destinations.FirstOrDefault(d => d.Id == suggestion.DestinationId);
-        //         }
-        //     }
-        // }
-
         private void LoadSuggestions()
         {
             if (File.Exists(_filePath))
@@ -195,21 +171,26 @@ namespace TravelSuggest.Data
                 var suggestions = JsonSerializer.Deserialize<List<Suggestion>>(jsonString);
                 _Suggestions = suggestions ?? new List<Suggestion>();
 
-                // Asociar User y Destination para cada Suggestion
+                // Asignar UserPreviewDTO y Destination directamente
                 foreach (var suggestion in _Suggestions)
                 {
-                    // Obtener el usuario por UserId y asignar UserName e Id
+                    // Obtener el usuario por UserId y asignar a UserPreviewDTO
                     var user = _users.FirstOrDefault(u => u.Id == suggestion.UserId);
                     if (user != null)
                     {
-                        suggestion.User = new UserPreview { UserName = user.UserName, Id = user.Id }; 
+                        suggestion.User = new UserPreviewDTO
+                        {
+                            Id = user.Id,
+                            UserName = user.UserName
+                        };
                     }
 
-                    // Obtener el destino por DestinationId y asignarlo sin reemplazar UserId
+                    // Asignar Destination completo como está
                     suggestion.Destination = _destinations.FirstOrDefault(d => d.Id == suggestion.DestinationId);
                 }
             }
         }
+
 
         public void UpdateSuggestion(Suggestion Suggestion, int userId)
         {

@@ -42,7 +42,7 @@ public class SuggestionController : ControllerBase
         }     
         catch (Exception ex)
         {
-            return BadRequest(ex);
+            return BadRequest(new { Message = ex.Message });
         }
     }
 

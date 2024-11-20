@@ -81,7 +81,7 @@ public class UserController : ControllerBase
             var user = _userService.CreateUser(userDto.UserName, userDto.Password, userDto.Email);
 
             // Retornar la acción exitosa junto con el nuevo usuario creado
-            return CreatedAtAction(nameof(GetAllUsers), new { userId = user.Id }, userDto);
+            return Ok (new { message = $"El usuario ha sido creado correctamente"});
     
         }     
         catch (Exception ex)
@@ -90,7 +90,6 @@ public class UserController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
     
     [HttpPut("{userId}")]
     public IActionResult UpdateUser(int userId, [FromBody] UserUpdateDTO userDto)
@@ -100,7 +99,7 @@ public class UserController : ControllerBase
         try
         {
             _userService.UpdateUserDetails(userId, userDto);
-            return Ok($"El usuario con Id: {userId} ha sido actualizado correctamente");
+            return Ok (new { message = $"El usuario con Id: {userId} ha sido actualizado correctamente"});
         }
         catch (KeyNotFoundException)
         {

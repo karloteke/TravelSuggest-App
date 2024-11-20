@@ -55,18 +55,28 @@ namespace TravelSuggest.Business
 
         public void UpdateUserDetails(int userId, UserUpdateDTO userUpdate)
         {
+            // Obtener el usuario existente desde el repositorio
             var user = _repository.GetUserById(userId);
             if (user == null)
             {
                 throw new KeyNotFoundException($"El usuario con Id: {userId} no existe.");
             }
 
+            // Actualizar solo los campos proporcionados
             user.UserName = userUpdate.UserName;
-            user.Password = userUpdate.Password;
             user.Email = userUpdate.Email;
+
+            // Actualizar la contraseña solo si se proporciona
+            if (!string.IsNullOrEmpty(userUpdate.Password))
+            {
+                user.Password = (userUpdate.Password); 
+            }
+
+            // Guardar los cambios
             _repository.UpdateUser(user);
             _repository.SaveChanges();
         }
+
 
         public void DeleteUser(int userId)
         {

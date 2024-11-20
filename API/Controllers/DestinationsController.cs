@@ -81,7 +81,8 @@ public class DestinationController : ControllerBase
             }
 
             _destinationService.CreateDestination(destinationDto.CityName, destinationDto.Description, destinationDto.Season, destinationDto.IsPopular ?? false, destinationDto.Category, userId);
-            return Ok($"Se ha creado correctamente el destino para el usuario con Id: {userId}");
+            
+            return Ok(new { message = $"Se ha creado correctamente el destino para el usuario con Id: {userId}" });
         }     
         catch (Exception ex)
         {

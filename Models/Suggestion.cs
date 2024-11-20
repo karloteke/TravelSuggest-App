@@ -20,7 +20,7 @@ public class Suggestion
     [ForeignKey("Destination")]
     public int? DestinationId { get; set; }
     
-    public UserPreviewDTO? User { get; set; }
+    public User User { get; set; }
     public Destination Destination { get; set; } 
 
     // Constructor sin parámetros

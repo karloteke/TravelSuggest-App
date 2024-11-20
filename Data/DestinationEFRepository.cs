@@ -17,19 +17,18 @@ namespace TravelSuggest.Data
 
         public void AddDestination(Destination destination, int userId)
         {
-            // Verificar si existe el destino en la base de datos
-            if (!_context.Destinations.Any(d => d.Id == destination.Id))
-            {
-                _context.Destinations.Add(destination);
-                SaveChanges();
+            // // Verificar si existe el destino en la base de datos
+            // if (!_context.Destinations.Any(d => d.Id == destination.Id))
+            // {
+            _context.Destinations.Add(destination);
+            SaveChanges();
 
-                // Asignar puntos al usuario
-                var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-                if (user != null)
-                {
-                    user.AddPoints(150); // Asigna 150 puntos por crear un nuevo destino
-                    SaveChanges(); 
-                }
+            // Asignar puntos al usuario
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                user.AddPoints(150); // Asigna 150 puntos por crear un nuevo destino
+                SaveChanges(); 
             }
         }
 

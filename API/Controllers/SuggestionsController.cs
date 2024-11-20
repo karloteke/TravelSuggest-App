@@ -96,7 +96,8 @@ public class SuggestionController : ControllerBase
                 suggestionDto.UserId 
             );
 
-            return Ok($"Se ha creado correctamente la sugerencia para el destino con Id: {destinationId}");
+            return Ok(new { message = $"Se ha creado correctamente la sugerencia para el destino con Id: {destinationId}" });
+
         }     
         catch (Exception ex)
         {

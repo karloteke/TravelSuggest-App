@@ -171,21 +171,23 @@ namespace TravelSuggest.Data
                 var suggestions = JsonSerializer.Deserialize<List<Suggestion>>(jsonString);
                 _Suggestions = suggestions ?? new List<Suggestion>();
 
-                // Asignar UserPreviewDTO y Destination directamente
                 foreach (var suggestion in _Suggestions)
                 {
-                    // Obtener el usuario por UserId y asignar a UserPreviewDTO
+                    // Obtener el usuario por UserId y asignar Datos a mostrar manualmente
                     var user = _users.FirstOrDefault(u => u.Id == suggestion.UserId);
                     if (user != null)
                     {
-                        suggestion.User = new UserPreviewDTO
+                        suggestion.User = new User
                         {
                             Id = user.Id,
-                            UserName = user.UserName
+                            UserName = user.UserName,
+                            Email = user.Email,
+                            Points = user.Points,
+                            Role = user.Role
                         };
                     }
 
-                    // Asignar Destination completo como está
+                    // Asignar Destination completo 
                     suggestion.Destination = _destinations.FirstOrDefault(d => d.Id == suggestion.DestinationId);
                 }
             }

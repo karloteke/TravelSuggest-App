@@ -36,18 +36,17 @@ namespace TravelSuggest.Data
             }
 
             // Verifica si una sugerencia similar ya existe para el mismo destino y usuario
-            if (!_context.Suggestions.Any(s => s.DestinationId == suggestion.DestinationId.Value && s.UserId == userId))
-            {
-                suggestion.UserId = userId;
-                _context.Suggestions.Add(suggestion);
-                SaveChanges();
+            // if (!_context.Suggestions.Any(s => s.DestinationId == suggestion.DestinationId.Value && s.UserId == userId))
+            // {
+            suggestion.UserId = userId;
+            _context.Suggestions.Add(suggestion);
+            SaveChanges();
 
-                var user = _userRepository.GetUserById(userId);
-                if (user != null)
-                {
-                    user.AddPoints(50); // Sumamos 50 puntos al crear la sugerencia
-                    _userRepository.SaveChanges();
-                }
+            var user = _userRepository.GetUserById(userId);
+            if (user != null)
+            {
+                user.AddPoints(50); // Sumamos 50 puntos al crear la sugerencia
+                _userRepository.SaveChanges();
             }
         }
 
@@ -86,13 +85,13 @@ namespace TravelSuggest.Data
             // Ejecutar la consulta final y convertirla a lista
             var suggestions = query.ToList();
 
-            // Agregar manualmente UserPreviewDTO a cada sugerencia
+            // Agregar manualmente Datos para mostrar a cada sugerencia
             foreach (var suggestion in suggestions)
             {
                 var user = _userRepository.GetUserById(suggestion.UserId);
                 if (user != null)
                 {
-                    suggestion.User = new UserPreviewDTO { Id = user.Id, UserName = user.UserName };
+                    suggestion.User = new User { Id = user.Id, UserName = user.UserName, Email = user.Email, Points = user.Points, Role = user.Role};
                 }
             }
 
@@ -101,7 +100,10 @@ namespace TravelSuggest.Data
 
         public List<Suggestion> GetAllSuggestions()
         {
-            return _context.Suggestions.Include(s => s.User).Include(s => s.Destination).ToList();
+            return _context.Suggestions
+            .Include(s => s.User)
+            .Include(s => s.Destination)
+            .ToList();
         }
 
         public Destination? GetDestinationById(int? destinationId)

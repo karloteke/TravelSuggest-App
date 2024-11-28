@@ -12,7 +12,7 @@ using TravelSuggest.Data;
 namespace TravelSuggest.Data.Migrations
 {
     [DbContext(typeof(TravelSuggestContext))]
-    [Migration("20241102164857_InitialCreate")]
+    [Migration("20241124231830_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -63,42 +63,62 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Category = "Ocio",
-                            CityName = "Londres",
-                            Description = "Explora la rica historia, cultura y entretenimiento que ofrece Londres, desde museos gratuitos hasta vibrantes mercados y parques.",
-                            IsPopular = false,
-                            Season = "Todo el año",
-                            UserId = 2
+                            Category = "Playa",
+                            CityName = "Barcelona",
+                            Description = "Barcelona combina playas, arquitectura modernista y una vibrante vida nocturna.",
+                            IsPopular = true,
+                            Season = "Verano",
+                            UserId = 3
                         },
                         new
                         {
                             Id = 2,
-                            Category = "Gastronómica",
-                            CityName = "París",
-                            Description = "La capital francesa es famosa por su exquisita gastronomía, desde panaderías hasta restaurantes de alta cocina.",
+                            Category = "Gastronomía",
+                            CityName = "Madrid",
+                            Description = "Madrid es conocida por sus museos de renombre, parques expansivos y una animada escena gastronómica.",
                             IsPopular = true,
-                            Season = "Primavera",
-                            UserId = 3
+                            Season = "Invierno",
+                            UserId = 4
                         },
                         new
                         {
                             Id = 3,
                             Category = "Cultural",
-                            CityName = "Ámsterdam",
-                            Description = "Ámsterdam es conocida por sus museos, arquitectura y vibrante escena artística.",
+                            CityName = "Granada",
+                            Description = "Granada alberga la impresionante Alhambra y una rica mezcla de culturas.",
                             IsPopular = true,
-                            Season = "Verano",
-                            UserId = 4
+                            Season = "Primavera",
+                            UserId = 5
                         },
                         new
                         {
                             Id = 4,
                             Category = "Aventura",
-                            CityName = "Mallorca",
-                            Description = "La isla de Mallorca ofrece una amplia variedad de actividades al aire libre, desde senderismo hasta deportes acuáticos.",
+                            CityName = "Londres",
+                            Description = "Explora la aventura urbana y los emocionantes parques de Londres con actividades para todos.",
+                            IsPopular = false,
+                            Season = "Otoño",
+                            UserId = 6
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Category = "Ocio",
+                            CityName = "Palma de Mallorca",
+                            Description = "Conocida por sus impresionantes calas, playas y una vibrante vida nocturna.",
                             IsPopular = true,
-                            Season = "Verano",
-                            UserId = 5
+                            Season = "Todas las estaciones",
+                            UserId = 7
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Category = "Ciudad",
+                            CityName = "Ámsterdam",
+                            Description = "Ámsterdam es famosa por sus canales, museos y una animada vida cultural.",
+                            IsPopular = true,
+                            Season = "Primavera",
+                            UserId = 8
                         });
                 });
 
@@ -139,52 +159,76 @@ namespace TravelSuggest.Data.Migrations
 
                     b.HasIndex("DestinationId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Suggestions");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Created_at = new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1717),
-                            Description = "Disfruta de una experiencia única viendo los principales monumentos de Londres desde el agua.",
+                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8233),
+                            Description = "Aprende a surfear en las famosas playas de Barcelona con instructores profesionales.",
                             DestinationId = 1,
-                            Price = 25.00m,
-                            Rating = 4,
-                            Title = "Tour en barco por el río Támesis",
+                            Price = 60.00m,
+                            Rating = 5,
+                            Title = "Clases de surf en la Barceloneta",
                             UserId = 3
                         },
                         new
                         {
                             Id = 2,
-                            Created_at = new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1723),
-                            Description = "Explora las delicias culinarias de París mientras paseas por uno de los barrios más emblemáticos de la ciudad.",
+                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8251),
+                            Description = "Degusta una variedad de tapas y especialidades locales en el histórico Mercado de San Miguel.",
                             DestinationId = 2,
-                            Price = 60.00m,
-                            Rating = 4,
-                            Title = "Tour gastronómico por Montmartre",
-                            UserId = 5
+                            Price = 50.00m,
+                            Rating = 5,
+                            Title = "Tour gastronómico por el Mercado de San Miguel",
+                            UserId = 4
                         },
                         new
                         {
                             Id = 3,
-                            Created_at = new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1728),
-                            Description = "Explora la ciudad sobre dos ruedas y descubre su belleza única.",
+                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8257),
+                            Description = "Explora los majestuosos palacios y jardines de la Alhambra con un guía experto.",
                             DestinationId = 3,
-                            Price = 15.00m,
-                            Rating = 4,
-                            Title = "Recorrido en bicicleta por los canales",
-                            UserId = 2
+                            Price = 30.00m,
+                            Rating = 5,
+                            Title = "Visita guiada a la Alhambra",
+                            UserId = 5
                         },
                         new
                         {
                             Id = 4,
-                            Created_at = new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1733),
-                            Description = "Descubre calas escondidas y cuevas marinas en un tour de motos de agua guiado.",
+                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8268),
+                            Description = "Disfruta de impresionantes vistas de Londres mientras recorres las rutas de Hampstead Heath.",
                             DestinationId = 4,
+                            Price = 25.00m,
+                            Rating = 4,
+                            Title = "Senderismo en Hampstead Heath",
+                            UserId = 6
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8274),
+                            Description = "Descubre calas escondidas y disfruta de aguas cristalinas en un paseo en barco.",
+                            DestinationId = 5,
                             Price = 150.00m,
                             Rating = 5,
-                            Title = "Tour motos de agua en Cala Gamba",
-                            UserId = 4
+                            Title = "Paseo en barco por las calas de Mallorca",
+                            UserId = 7
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8296),
+                            Description = "Explora Ámsterdam como un local en un tour en bicicleta por sus canales históricos.",
+                            DestinationId = 6,
+                            Price = 40.00m,
+                            Rating = 4,
+                            Title = "Tour en bicicleta por los canales",
+                            UserId = 8
                         });
                 });
 
@@ -224,7 +268,7 @@ namespace TravelSuggest.Data.Migrations
                         {
                             Id = 1,
                             Email = "carlota@gmail.com",
-                            Password = "Carlota36",
+                            Password = "carlota37",
                             Points = 0,
                             Role = "admin",
                             UserName = "Carlota"
@@ -232,35 +276,62 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 2,
+                            Email = "jesus@gmail.com",
+                            Password = "jesus31",
+                            Points = 0,
+                            Role = "admin",
+                            UserName = "Jesús"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "jumar@gmail.com",
+                            Password = "jumar123",
+                            Points = 300,
+                            Role = "user",
+                            UserName = "Jumar"
+                        },
+                        new
+                        {
+                            Id = 4,
                             Email = "ana@gmail.com",
-                            Password = "Ana123",
+                            Password = "ana123",
                             Points = 300,
                             Role = "user",
                             UserName = "Ana"
                         },
                         new
                         {
-                            Id = 3,
-                            Email = "jesus@gmail.com",
-                            Password = "Jesus30",
-                            Points = 300,
-                            Role = "user",
-                            UserName = "Jesus"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "paola@gmail.com",
-                            Password = "Paola123",
-                            Points = 300,
-                            Role = "user",
-                            UserName = "Paola"
-                        },
-                        new
-                        {
                             Id = 5,
+                            Email = "nerea@gmail.com",
+                            Password = "nerea123",
+                            Points = 300,
+                            Role = "user",
+                            UserName = "Nerea"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Email = "bea@gmail.com",
+                            Password = "bea123",
+                            Points = 300,
+                            Role = "user",
+                            UserName = "Bea"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Email = "laura@gmail.com",
+                            Password = "laura123",
+                            Points = 300,
+                            Role = "user",
+                            UserName = "Laura"
+                        },
+                        new
+                        {
+                            Id = 8,
                             Email = "pilar@gmail.com",
-                            Password = "Pilar123",
+                            Password = "pilar123",
                             Points = 300,
                             Role = "user",
                             UserName = "Pilar"
@@ -273,7 +344,13 @@ namespace TravelSuggest.Data.Migrations
                         .WithMany()
                         .HasForeignKey("DestinationId");
 
+                    b.HasOne("TravelSuggest.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Destination");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

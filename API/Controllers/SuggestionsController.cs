@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TravelSuggest.Business;
 using TravelSuggest.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace TravelSuggest.API.Controllers;
 
@@ -61,7 +62,7 @@ public class SuggestionController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = "admin, user")]
     [HttpPost]
     public IActionResult Newsuggestion([FromBody] SuggestionCreateDTO suggestionDto, [FromQuery] int destinationId)
     {
@@ -105,7 +106,7 @@ public class SuggestionController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = "admin, user")]
     [HttpPut("{suggestionId}")]
     public IActionResult Updatesuggestion(int suggestionId, [FromBody] SuggestionUpdateDTO suggestionDto)
     {
@@ -114,7 +115,7 @@ public class SuggestionController : ControllerBase
         try
         {
             _suggestionService.UpdateSuggestionDetails(suggestionId, suggestionDto);
-            return Ok($"La sugerencia con Id: {suggestionId} ha sido actualizada correctamente");
+            return Ok(new { message = $"La sugerencia con Id: {suggestionId} ha sido actualizada correctamente"});
         }
         catch (KeyNotFoundException)
         {
@@ -122,6 +123,7 @@ public class SuggestionController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "admin, user")]
     [HttpDelete("{suggestionId}")]
     public IActionResult Deletesuggestion(int suggestionId)
     {

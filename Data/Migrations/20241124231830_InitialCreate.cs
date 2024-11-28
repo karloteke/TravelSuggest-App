@@ -70,6 +70,11 @@ namespace TravelSuggest.Data.Migrations
                         column: x => x.DestinationId,
                         principalTable: "Destinations",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Suggestions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -77,10 +82,12 @@ namespace TravelSuggest.Data.Migrations
                 columns: new[] { "Id", "Category", "CityName", "Description", "IsPopular", "Season", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Ocio", "Londres", "Explora la rica historia, cultura y entretenimiento que ofrece Londres, desde museos gratuitos hasta vibrantes mercados y parques.", false, "Todo el año", 2 },
-                    { 2, "Gastronómica", "París", "La capital francesa es famosa por su exquisita gastronomía, desde panaderías hasta restaurantes de alta cocina.", true, "Primavera", 3 },
-                    { 3, "Cultural", "Ámsterdam", "Ámsterdam es conocida por sus museos, arquitectura y vibrante escena artística.", true, "Verano", 4 },
-                    { 4, "Aventura", "Mallorca", "La isla de Mallorca ofrece una amplia variedad de actividades al aire libre, desde senderismo hasta deportes acuáticos.", true, "Verano", 5 }
+                    { 1, "Playa", "Barcelona", "Barcelona combina playas, arquitectura modernista y una vibrante vida nocturna.", true, "Verano", 3 },
+                    { 2, "Gastronomía", "Madrid", "Madrid es conocida por sus museos de renombre, parques expansivos y una animada escena gastronómica.", true, "Invierno", 4 },
+                    { 3, "Cultural", "Granada", "Granada alberga la impresionante Alhambra y una rica mezcla de culturas.", true, "Primavera", 5 },
+                    { 4, "Aventura", "Londres", "Explora la aventura urbana y los emocionantes parques de Londres con actividades para todos.", false, "Otoño", 6 },
+                    { 5, "Ocio", "Palma de Mallorca", "Conocida por sus impresionantes calas, playas y una vibrante vida nocturna.", true, "Todas las estaciones", 7 },
+                    { 6, "Ciudad", "Ámsterdam", "Ámsterdam es famosa por sus canales, museos y una animada vida cultural.", true, "Primavera", 8 }
                 });
 
             migrationBuilder.InsertData(
@@ -88,11 +95,14 @@ namespace TravelSuggest.Data.Migrations
                 columns: new[] { "Id", "Email", "Password", "Points", "Role", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "carlota@gmail.com", "Carlota36", 0, "admin", "Carlota" },
-                    { 2, "ana@gmail.com", "Ana123", 300, "user", "Ana" },
-                    { 3, "jesus@gmail.com", "Jesus30", 300, "user", "Jesus" },
-                    { 4, "paola@gmail.com", "Paola123", 300, "user", "Paola" },
-                    { 5, "pilar@gmail.com", "Pilar123", 300, "user", "Pilar" }
+                    { 1, "carlota@gmail.com", "carlota37", 0, "admin", "Carlota" },
+                    { 2, "jesus@gmail.com", "jesus31", 0, "admin", "Jesús" },
+                    { 3, "jumar@gmail.com", "jumar123", 300, "user", "Jumar" },
+                    { 4, "ana@gmail.com", "ana123", 300, "user", "Ana" },
+                    { 5, "nerea@gmail.com", "nerea123", 300, "user", "Nerea" },
+                    { 6, "bea@gmail.com", "bea123", 300, "user", "Bea" },
+                    { 7, "laura@gmail.com", "laura123", 300, "user", "Laura" },
+                    { 8, "pilar@gmail.com", "pilar123", 300, "user", "Pilar" }
                 });
 
             migrationBuilder.InsertData(
@@ -100,16 +110,23 @@ namespace TravelSuggest.Data.Migrations
                 columns: new[] { "Id", "Created_at", "Description", "DestinationId", "Price", "Rating", "Title", "UserId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1717), "Disfruta de una experiencia única viendo los principales monumentos de Londres desde el agua.", 1, 25.00m, 4, "Tour en barco por el río Támesis", 3 },
-                    { 2, new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1723), "Explora las delicias culinarias de París mientras paseas por uno de los barrios más emblemáticos de la ciudad.", 2, 60.00m, 4, "Tour gastronómico por Montmartre", 5 },
-                    { 3, new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1728), "Explora la ciudad sobre dos ruedas y descubre su belleza única.", 3, 15.00m, 4, "Recorrido en bicicleta por los canales", 2 },
-                    { 4, new DateTime(2024, 11, 2, 17, 48, 56, 639, DateTimeKind.Local).AddTicks(1733), "Descubre calas escondidas y cuevas marinas en un tour de motos de agua guiado.", 4, 150.00m, 5, "Tour motos de agua en Cala Gamba", 4 }
+                    { 1, new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8233), "Aprende a surfear en las famosas playas de Barcelona con instructores profesionales.", 1, 60.00m, 5, "Clases de surf en la Barceloneta", 3 },
+                    { 2, new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8251), "Degusta una variedad de tapas y especialidades locales en el histórico Mercado de San Miguel.", 2, 50.00m, 5, "Tour gastronómico por el Mercado de San Miguel", 4 },
+                    { 3, new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8257), "Explora los majestuosos palacios y jardines de la Alhambra con un guía experto.", 3, 30.00m, 5, "Visita guiada a la Alhambra", 5 },
+                    { 4, new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8268), "Disfruta de impresionantes vistas de Londres mientras recorres las rutas de Hampstead Heath.", 4, 25.00m, 4, "Senderismo en Hampstead Heath", 6 },
+                    { 5, new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8274), "Descubre calas escondidas y disfruta de aguas cristalinas en un paseo en barco.", 5, 150.00m, 5, "Paseo en barco por las calas de Mallorca", 7 },
+                    { 6, new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8296), "Explora Ámsterdam como un local en un tour en bicicleta por sus canales históricos.", 6, 40.00m, 4, "Tour en bicicleta por los canales", 8 }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Suggestions_DestinationId",
                 table: "Suggestions",
                 column: "DestinationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suggestions_UserId",
+                table: "Suggestions",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -119,10 +136,10 @@ namespace TravelSuggest.Data.Migrations
                 name: "Suggestions");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Destinations");
 
             migrationBuilder.DropTable(
-                name: "Destinations");
+                name: "Users");
         }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TravelSuggest.Business;
 using TravelSuggest.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace TravelSuggest.API.Controllers;
 
@@ -57,7 +58,7 @@ public class DestinationController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = "admin, user")]
     [HttpPost]
     public IActionResult NewDestination([FromBody] DestinationCreateDTO destinationDto, [FromQuery] int userId)
     {
@@ -90,7 +91,7 @@ public class DestinationController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = "admin, user")]
     [HttpPut("{destinationId}")]
     public IActionResult Updatedestination(int destinationId, [FromBody] DestinationUpdateDTO destinationDto)
     {
@@ -107,6 +108,7 @@ public class DestinationController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "admin, user")]
     [HttpDelete("{destinationId}")]
     public IActionResult DeleteDestination(int destinationId)
     {

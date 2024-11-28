@@ -17,7 +17,8 @@ public class UserController : ControllerBase
         _logger = logger;
         _userService = UserService;
     }
-        
+
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet(Name = "GetAllUsers")] 
     public ActionResult<IEnumerable<User>> GetAllUsers([FromQuery] UserQueryParameters userQueryParameters)
     {
@@ -40,7 +41,6 @@ public class UserController : ControllerBase
         }
     }
 
-    
     [HttpGet("{userId}", Name = "GetUserById")]
     public IActionResult GetUser(int userId)
     {
@@ -91,6 +91,7 @@ public class UserController : ControllerBase
         }
     }
     
+    [Authorize(Roles = "admin, user")]
     [HttpPut("{userId}")]
     public IActionResult UpdateUser(int userId, [FromBody] UserUpdateDTO userDto)
     {
@@ -107,6 +108,7 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "admin, user")]
     [HttpDelete("{userId}")]
     public IActionResult DeleteUser(int userId)
     {

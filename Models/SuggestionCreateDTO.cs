@@ -10,7 +10,7 @@ public class SuggestionCreateDTO
     [Required(ErrorMessage = "La descripción es obligatoria.")]
     public string? Description { get; set; }
 
-    [Range(1, double.MaxValue, ErrorMessage = "El precio debe ser mayor que 0.")]
+    [Range(0, double.MaxValue, ErrorMessage = "El precio debe ser mayor o igual a 0.")]
     public decimal? Price { get; set; }
 
     [Range(1, 5, ErrorMessage = "La calificación debe estar entre 1 y 5.")]

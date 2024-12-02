@@ -5,7 +5,7 @@ namespace TravelSuggest.Business
 {
     public interface IDestinationService
     {
-        void CreateDestination(string CityName, string description, string season, bool isPopular, string category, int userId);  
+        void CreateDestination(string CityName, string description, string season, bool isPopular, string category, int userId, string? imageBase64);  
         List<Destination> GetAllDestinations();
         public User GetUserById(int userId);
         public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? DestinationQueryParameters);

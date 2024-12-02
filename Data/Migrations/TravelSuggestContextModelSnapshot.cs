@@ -42,6 +42,9 @@ namespace TravelSuggest.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageBase64")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsPopular")
                         .HasColumnType("bit");
 
@@ -164,7 +167,7 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8233),
+                            Created_at = new DateTime(2024, 12, 1, 20, 16, 25, 54, DateTimeKind.Local).AddTicks(3598),
                             Description = "Aprende a surfear en las famosas playas de Barcelona con instructores profesionales.",
                             DestinationId = 1,
                             Price = 60.00m,
@@ -175,7 +178,7 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8251),
+                            Created_at = new DateTime(2024, 12, 1, 20, 16, 25, 54, DateTimeKind.Local).AddTicks(3608),
                             Description = "Degusta una variedad de tapas y especialidades locales en el histórico Mercado de San Miguel.",
                             DestinationId = 2,
                             Price = 50.00m,
@@ -186,7 +189,7 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 3,
-                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8257),
+                            Created_at = new DateTime(2024, 12, 1, 20, 16, 25, 54, DateTimeKind.Local).AddTicks(3617),
                             Description = "Explora los majestuosos palacios y jardines de la Alhambra con un guía experto.",
                             DestinationId = 3,
                             Price = 30.00m,
@@ -197,7 +200,7 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 4,
-                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8268),
+                            Created_at = new DateTime(2024, 12, 1, 20, 16, 25, 54, DateTimeKind.Local).AddTicks(3626),
                             Description = "Disfruta de impresionantes vistas de Londres mientras recorres las rutas de Hampstead Heath.",
                             DestinationId = 4,
                             Price = 25.00m,
@@ -208,7 +211,7 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 5,
-                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8274),
+                            Created_at = new DateTime(2024, 12, 1, 20, 16, 25, 54, DateTimeKind.Local).AddTicks(3633),
                             Description = "Descubre calas escondidas y disfruta de aguas cristalinas en un paseo en barco.",
                             DestinationId = 5,
                             Price = 150.00m,
@@ -219,7 +222,7 @@ namespace TravelSuggest.Data.Migrations
                         new
                         {
                             Id = 6,
-                            Created_at = new DateTime(2024, 11, 25, 0, 18, 29, 655, DateTimeKind.Local).AddTicks(8296),
+                            Created_at = new DateTime(2024, 12, 1, 20, 16, 25, 54, DateTimeKind.Local).AddTicks(3640),
                             Description = "Explora Ámsterdam como un local en un tour en bicicleta por sus canales históricos.",
                             DestinationId = 6,
                             Price = 40.00m,

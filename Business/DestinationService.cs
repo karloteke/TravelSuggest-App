@@ -13,7 +13,7 @@ namespace TravelSuggest.Business
         }
 
 
-        public void CreateDestination(string cityName, string description, string season, bool isPopular, string category, int userId)
+        public void CreateDestination(string cityName, string description, string season, bool isPopular, string category, int userId, string imageBase64)
         {
 
             var user = _repository.GetUserById(userId);
@@ -21,7 +21,8 @@ namespace TravelSuggest.Business
             if (user != null)
             { 
                
-                var destination = new Destination(cityName, description, season, isPopular, category, userId);
+                var destination = new Destination(cityName, description, season, isPopular, category, userId, imageBase64);
+           
                 _repository.AddDestination(destination, userId);
                 _repository.SaveChanges();
             }
@@ -107,6 +108,7 @@ namespace TravelSuggest.Business
             destination.Season = destinationUpdate.Season;
             destination.IsPopular = destinationUpdate.IsPopular ?? false;
             destination.Category = destinationUpdate.Category;
+            destination.ImageBase64 = destinationUpdate.ImageBase64;
             _repository.UpdateDestination(destination, destination.UserId ?? 0);
             _repository.SaveChanges();
         }

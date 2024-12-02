@@ -20,3 +20,4 @@ public class SuggestionCreateDTO
     [Range(1, int.MaxValue, ErrorMessage = "El ID del usuario debe ser mayor que cero.")]
     public int UserId { get; set; }
 }
+

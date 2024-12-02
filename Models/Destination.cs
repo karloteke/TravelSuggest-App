@@ -19,11 +19,13 @@
         [ForeignKey("User")]
         public int? UserId { get; set; }
 
+        public string? ImageBase64 { get; set; }
+
         // Constructor sin parámetros
         public Destination() { }
 
 
-        public Destination ( string cityName, string description, string season, bool isPopular, string category, int userId)
+        public Destination ( string cityName, string description, string season, bool isPopular, string category, int userId, string imageBase64)
         {
             CityName = cityName;
             Description = description;
@@ -31,5 +33,8 @@
             IsPopular = isPopular;
             Category = category;
             UserId = userId;
+            ImageBase64 = imageBase64;
         }
-    }
+
+
+}

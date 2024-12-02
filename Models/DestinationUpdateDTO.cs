@@ -17,4 +17,5 @@ public class DestinationUpdateDTO
 
     [Required(ErrorMessage = "La categoría es obligatoria.")]
     public string? Category { get; set; }  
+    public string? ImageBase64 { get; set; }
 }

@@ -81,7 +81,7 @@ public class DestinationController : ControllerBase
                 return NotFound ("No existe ese ID");
             }
 
-            _destinationService.CreateDestination(destinationDto.CityName, destinationDto.Description, destinationDto.Season, destinationDto.IsPopular ?? false, destinationDto.Category, userId);
+            _destinationService.CreateDestination(destinationDto.CityName, destinationDto.Description, destinationDto.Season, destinationDto.IsPopular ?? false, destinationDto.Category, userId, destinationDto.ImageBase64);
             
             return Ok(new { message = $"Se ha creado correctamente el destino para el usuario con Id: {userId}" });
         }     
@@ -100,7 +100,7 @@ public class DestinationController : ControllerBase
         try
         {
             _destinationService.UpdateDestinationDetails(destinationId, destinationDto);
-            return Ok($"El destino con Id: {destinationId} ha sido actualizado correctamente");
+            return Ok(new { message = $"El destino con Id: {destinationId} ha sido actualizado correctamente"});
         }
         catch (KeyNotFoundException)
         {

@@ -17,7 +17,6 @@ namespace TravelSuggest.Data
 
         public void AddDestination(Destination destination, int userId)
         {
-       
             _context.Destinations.Add(destination);
             SaveChanges();
         }

@@ -35,9 +35,6 @@ namespace TravelSuggest.Data
                 throw new InvalidOperationException("El destino no existe.");
             }
 
-            // Verifica si una sugerencia similar ya existe para el mismo destino y usuario
-            // if (!_context.Suggestions.Any(s => s.DestinationId == suggestion.DestinationId.Value && s.UserId == userId))
-            // {
             suggestion.UserId = userId;
             _context.Suggestions.Add(suggestion);
             SaveChanges();
@@ -45,7 +42,6 @@ namespace TravelSuggest.Data
             var user = _userRepository.GetUserById(userId);
             if (user != null)
             {
-                user.AddPoints(50); // Sumamos 50 puntos al crear la sugerencia
                 _userRepository.SaveChanges();
             }
         }
@@ -82,8 +78,10 @@ namespace TravelSuggest.Data
                 query = query.Where(s => s.Rating == suggestionQueryParameters.Rating.Value);
             }
 
-            // Ejecutar la consulta final y convertirla a lista
-            var suggestions = query.ToList();
+            // Ordena por ID descendente para que la sugerencia más reciente aparezca primero
+            query = query.OrderByDescending(d => d.Id);
+
+            var suggestions = query.ToList(); // Ejecutar la consulta final y convertirla a lista
 
             // Agregar manualmente Datos para mostrar a cada sugerencia
             foreach (var suggestion in suggestions)
@@ -94,7 +92,6 @@ namespace TravelSuggest.Data
                     suggestion.User = new User { Id = user.Id, UserName = user.UserName, Email = user.Email, Points = user.Points, Role = user.Role};
                 }
             }
-
             return suggestions;
         }
 
@@ -104,6 +101,11 @@ namespace TravelSuggest.Data
             .Include(s => s.User)
             .Include(s => s.Destination)
             .ToList();
+        }
+
+        public User? GetUserById(int? userId)
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == userId);
         }
 
         public Destination? GetDestinationById(int? destinationId)
@@ -134,13 +136,6 @@ namespace TravelSuggest.Data
             var suggestion = _context.Suggestions.FirstOrDefault(s => s.Id == suggestionId);
             if (suggestion != null)
             {
-                var user = _userRepository.GetUserById(suggestion.UserId);
-                if (user != null)
-                {
-                    user.DeductPoints(50); // Resta 50 puntos al eliminar la sugerencia
-                    _userRepository.SaveChanges();
-                }
-
                 _context.Suggestions.Remove(suggestion);
                 SaveChanges();
             }

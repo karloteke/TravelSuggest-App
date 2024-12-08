@@ -5,6 +5,7 @@ namespace TravelSuggest.Data
     public interface ISuggestionRepository
     {
         void AddSuggestion(Suggestion Suggestion, int UserId);
+        User? GetUserById(int? userId);
         List<Suggestion> GetAllSuggestions();
         public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters);
         Destination? GetDestinationById(int? destinationId);

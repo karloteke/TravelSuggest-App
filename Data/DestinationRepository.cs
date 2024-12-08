@@ -112,7 +112,6 @@ namespace TravelSuggest.Data
                     var user = _userRepository.GetUserById(destination.UserId); 
                     if (user != null)
                     {
-                        user.DeductPoints(150); // Resta 150 puntos al eliminar el destino
                         _userRepository.SaveChanges(); 
                     }
 

@@ -102,6 +102,11 @@ namespace TravelSuggest.Data
             return _Suggestions;
         }
 
+        public User? GetUserById(int? userId)
+        {
+            return _userRepository.GetUserById(userId);
+        }
+
         public Destination? GetDestinationById(int? destinationId)
         {
             return _destinationRepository.GetDestinationById(destinationId.Value);
@@ -127,7 +132,6 @@ namespace TravelSuggest.Data
                     var user = _userRepository.GetUserById(suggestion.UserId); 
                     if (user != null)
                     {
-                        user.DeductPoints(50); // Resta 50 puntos al eliminar la sugerencia
                         _userRepository.SaveChanges(); 
                     }
 

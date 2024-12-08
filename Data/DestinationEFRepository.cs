@@ -17,19 +17,9 @@ namespace TravelSuggest.Data
 
         public void AddDestination(Destination destination, int userId)
         {
-            // // Verificar si existe el destino en la base de datos
-            // if (!_context.Destinations.Any(d => d.Id == destination.Id))
-            // {
+       
             _context.Destinations.Add(destination);
             SaveChanges();
-
-            // Asignar puntos al usuario
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user != null)
-            {
-                user.AddPoints(150); // Asigna 150 puntos por crear un nuevo destino
-                SaveChanges(); 
-            }
         }
 
         public IEnumerable<Destination> GetAllDestinations(DestinationQueryParameters? destinationQueryParameters)
@@ -66,6 +56,9 @@ namespace TravelSuggest.Data
                 query = query.Where(d => d.IsPopular == destinationQueryParameters.IsPopular.Value);
             }
 
+            // Ordena por ID descendente para que el destino más reciente aparezca primero
+            query = query.OrderByDescending(d => d.Id);
+
             return query.ToList();
         }
 
@@ -97,14 +90,6 @@ namespace TravelSuggest.Data
                 var destination = _context.Destinations.FirstOrDefault(d => d.Id == destinationId);
                 if (destination != null)
                 {
-                    // Restar puntos al usuario
-                    var user = _context.Users.FirstOrDefault(u => u.Id == destination.UserId);
-                    if (user != null)
-                    {
-                        user.DeductPoints(150); // Resta 150 puntos al eliminar el destino
-                        SaveChanges(); 
-                    }
-
                     _context.Destinations.Remove(destination);
                     SaveChanges();
                 }
@@ -114,14 +99,6 @@ namespace TravelSuggest.Data
         public void UpdateDestination(Destination destination, int userId)
         {
             _context.Entry(destination).State = EntityState.Modified;
-
-            // Opcional: Asignar puntos al usuario si es necesario al actualizar
-            // var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            // if (user != null)
-            // {
-            //     user.AddPoints(150); // Asigna 150 puntos al actualizar un destino
-            //     SaveChanges(); 
-            // }
         }
 
         public void SaveChanges()

@@ -35,6 +35,4 @@
             UserId = userId;
             ImageBase64 = imageBase64;
         }
-
-
-}
+    }

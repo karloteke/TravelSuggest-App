@@ -24,6 +24,8 @@ namespace TravelSuggest.Business
                 var destination = new Destination(cityName, description, season, isPopular, category, userId, imageBase64);
            
                 _repository.AddDestination(destination, userId);
+           
+                user.AddPoints(150);  // Asignar puntos al usuario
                 _repository.SaveChanges();
             }
             else
@@ -54,17 +56,6 @@ namespace TravelSuggest.Business
             return User;
         }
 
-
-        // public Destination GetDestinationById(int DestinationId)
-        // {
-        //     var Destination = _repository.GetDestinationById(DestinationId);
-            
-        //     if(Destination == null)
-        //     {
-        //           throw new KeyNotFoundException($"El destino con Id {DestinationId} no existe.");
-        //     }
-        //     return Destination;
-        // }
         public Destination GetDestinationById(int destinationId)
         {
             var destinations = _repository.GetAllDestinations();
@@ -113,15 +104,25 @@ namespace TravelSuggest.Business
             _repository.SaveChanges();
         }
 
-        public void DeleteDestination(int DestinationId)
+        public void DeleteDestination(int destinationId)
         {
-            var User = _repository.GetDestinationById(DestinationId);
-
-            if (User == null)
+            // Obtener el destino
+            var destination = _repository.GetDestinationById(destinationId);
+            if (destination == null)
             {
-                throw new KeyNotFoundException($"El destino con Id: {DestinationId} no existe.");
+                throw new KeyNotFoundException($"El destino con Id: {destinationId} no existe.");
             }
-             _repository.DeleteDestination(DestinationId);         
+
+            // Obtener el usuario asociado
+            var user = _repository.GetUserById(destination.UserId);
+            if (user != null)
+            {
+                user.DeductPoints(150); // Restamos 150 puntos por eliminar el destino
+            }
+
+            _repository.DeleteDestination(destinationId);
+
+            _repository.SaveChanges();
         }
     }
 }

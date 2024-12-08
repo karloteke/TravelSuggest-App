@@ -25,11 +25,20 @@ namespace TravelSuggest.Business
 
             }
 
+            // Verificar si el usuario existe
+            var user = _repository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException($"El usuario con ID {userId} no existe.");
+            }
+
             // Crear la sugerencia ya que el destino existe
             var suggestion = new Suggestion(title, description, price, rating, created_at, userId, destinationId);
 
-            // Agregar la sugerencia al repositorio
-            _repository.AddSuggestion(suggestion, userId);
+            _repository.AddSuggestion(suggestion, userId);  // Agregar la sugerencia al repositorio
+
+            user.AddPoints(50);  // Asignar puntos al usuario
+            
             _repository.SaveChanges(); 
         }
 
@@ -95,15 +104,26 @@ namespace TravelSuggest.Business
             _repository.SaveChanges();
         }
 
-        public void DeleteSuggestion(int SuggestionId)
-        {
-            var User = _repository.GetSuggestionById(SuggestionId);
 
-            if (User == null)
+        public void DeleteSuggestion(int suggestionId)
             {
-                throw new KeyNotFoundException($"La sugerencia con Id: {SuggestionId} no existe.");
+                // Obtener la sugerencia
+                var suggestion = _repository.GetSuggestionById(suggestionId);
+                if (suggestion == null)
+                {
+                    throw new KeyNotFoundException($"El destino con Id: {suggestionId} no existe.");
+                }
+
+                // Obtener el usuario asociado
+                var user = _repository.GetUserById(suggestion.UserId);
+                if (user != null)
+                {
+                    user.DeductPoints(50); // Restamos 50 puntos por eliminar la sugerencia
+                }
+
+                _repository.DeleteSuggestion(suggestionId);
+
+                _repository.SaveChanges();
             }
-             _repository.DeleteSuggestion(SuggestionId);         
-        }
     }
 }

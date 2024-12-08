@@ -1,0 +1,40 @@
+version: '3.8'
+ 
+networks:
+    travelsuggestapp:       
+        driver: bridge
+services:
+    db:
+        image: mcr.microsoft.com/mssql/server:2019-CU21-ubuntu-20.04
+        restart: always #reinicia la base de datos automáticamente
+        ports:
+            - 2000:1433
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=MyPass@word   
+        networks:
+            - travelsuggestapp
+        volumes:
+            - db-data:/var/opt/mssql          
+    api:
+        restart: unless-stopped #Reinicia excepto si yo lo paro de propio
+        ports:
+            - 2001:8080
+        build:
+          context: .
+          dockerfile: API/Dockerfile
+        depends_on:
+            - db
+        networks:
+            - travelsuggestapp
+    web:
+        image: carlota36/travelsuggest:1.1
+        ports:
+            - 2002:80 
+        depends_on:
+            - api
+        networks:
+            - travelsuggestapp
+        
+volumes:
+    db-data: {}

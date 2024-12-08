@@ -25,7 +25,6 @@ namespace TravelSuggest.Data
             // Verifica si ya existe el usuario en la lista antes de agregarlo
             if (!_users.Any(u => u.UserName == user.UserName))
             {
-                // user.Points = 100; // Asignar 100 puntos al registrarse
                 _users.Add(user);
                 SaveChanges();
             }

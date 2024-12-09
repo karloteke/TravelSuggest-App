@@ -1,5 +1,4 @@
-version: '3.8'
- 
+
 networks:
     travelsuggestapp:       
         driver: bridge
@@ -28,7 +27,7 @@ services:
         networks:
             - travelsuggestapp
     web:
-        image: carlota36/travelsuggest:1.1
+        image: carlota36/travelsuggest:1.6
         ports:
             - 2002:80 
         depends_on:

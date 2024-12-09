@@ -111,12 +111,12 @@ namespace TravelSuggest.Data.Migrations
                 columns: new[] { "Id", "Created_at", "Description", "DestinationId", "Price", "Rating", "Title", "UserId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 12, 8, 21, 20, 16, 195, DateTimeKind.Local).AddTicks(7291), "Aprende a surfear en las famosas playas de Barcelona con instructores profesionales.", 1, 60.00m, 5, "Clases de surf en la Barceloneta", 3 },
-                    { 2, new DateTime(2024, 12, 8, 21, 20, 16, 195, DateTimeKind.Local).AddTicks(7297), "Degusta una variedad de tapas y especialidades locales en el histórico Mercado de San Miguel.", 2, 50.00m, 5, "Tour gastronómico por el Mercado de San Miguel", 4 },
-                    { 3, new DateTime(2024, 12, 8, 21, 20, 16, 195, DateTimeKind.Local).AddTicks(7303), "Explora los majestuosos palacios y jardines de la Alhambra con un guía experto.", 3, 30.00m, 5, "Visita guiada a la Alhambra", 5 },
-                    { 4, new DateTime(2024, 12, 8, 21, 20, 16, 195, DateTimeKind.Local).AddTicks(7308), "Disfruta de impresionantes vistas de Londres mientras recorres las rutas de Hampstead Heath.", 4, 25.00m, 4, "Senderismo en Hampstead Heath", 6 },
-                    { 5, new DateTime(2024, 12, 8, 21, 20, 16, 195, DateTimeKind.Local).AddTicks(7314), "Descubre calas escondidas y disfruta de aguas cristalinas en un paseo en barco.", 5, 150.00m, 5, "Paseo en barco por las calas de Mallorca", 7 },
-                    { 6, new DateTime(2024, 12, 8, 21, 20, 16, 195, DateTimeKind.Local).AddTicks(7319), "Explora Ámsterdam como un local en un tour en bicicleta por sus canales históricos.", 6, 40.00m, 4, "Tour en bicicleta por los canales", 8 }
+                    { 1, new DateTime(2024, 12, 9, 14, 7, 24, 187, DateTimeKind.Local).AddTicks(9092), "Aprende a surfear en las famosas playas de Barcelona con instructores profesionales.", 1, 60.00m, 5, "Clases de surf en la Barceloneta", 3 },
+                    { 2, new DateTime(2024, 12, 9, 14, 7, 24, 187, DateTimeKind.Local).AddTicks(9102), "Degusta una variedad de tapas y especialidades locales en el histórico Mercado de San Miguel.", 2, 50.00m, 5, "Tour gastronómico por el Mercado de San Miguel", 4 },
+                    { 3, new DateTime(2024, 12, 9, 14, 7, 24, 187, DateTimeKind.Local).AddTicks(9110), "Explora los majestuosos palacios y jardines de la Alhambra con un guía experto.", 3, 30.00m, 5, "Visita guiada a la Alhambra", 5 },
+                    { 4, new DateTime(2024, 12, 9, 14, 7, 24, 187, DateTimeKind.Local).AddTicks(9117), "Disfruta de impresionantes vistas de Londres mientras recorres las rutas de Hampstead Heath.", 4, 25.00m, 4, "Senderismo en Hampstead Heath", 6 },
+                    { 5, new DateTime(2024, 12, 9, 14, 7, 24, 187, DateTimeKind.Local).AddTicks(9124), "Descubre calas escondidas y disfruta de aguas cristalinas en un paseo en barco.", 5, 150.00m, 5, "Paseo en barco por las calas de Mallorca", 7 },
+                    { 6, new DateTime(2024, 12, 9, 14, 7, 24, 187, DateTimeKind.Local).AddTicks(9132), "Explora Ámsterdam como un local en un tour en bicicleta por sus canales históricos.", 6, 40.00m, 4, "Tour en bicicleta por los canales", 8 }
                 });
 
             migrationBuilder.CreateIndex(

@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cargar configuración local con secretos (no se sube a GitHub)
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+
 builder.Services.AddControllers();
 
 // Obtener la clave secreta desde la configuración
@@ -89,7 +92,8 @@ var connectionString = builder.Configuration.GetConnectionString("ServerDB_local
 // var connectionString = builder.Configuration.GetConnectionString("ServerDB");
 
 builder.Services.AddDbContext<TravelSuggestContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseSqlServer(connectionString, sqlOptions =>
+        sqlOptions.EnableRetryOnFailure())
 );
 
 // Configure CORS

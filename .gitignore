@@ -24,3 +24,7 @@ artifacts/
 *.user
 *.userosscache
 *.suo
+
+# Archivos con secretos - NO subir a GitHub
+API/appsettings.Local.json
+.env

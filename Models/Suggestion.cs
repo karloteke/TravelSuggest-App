@@ -20,14 +20,16 @@ public class Suggestion
     [ForeignKey("Destination")]
     public int? DestinationId { get; set; }
     
-    public User User { get; set; }
-    public Destination Destination { get; set; } 
+    public User? User { get; set; }
+    public Destination? Destination { get; set; }
+
+    public string? ImageBase64 { get; set; }
 
     // Constructor sin parámetros
     public Suggestion() { }
 
 
-    public Suggestion ( string title, string description, decimal price, int rating, DateTime created_at, int userId, int destinationId)
+    public Suggestion ( string title, string description, decimal price, int rating, DateTime created_at, int userId, int destinationId, string? imageBase64 = null)
     {
         Title = title;
         Description = description;
@@ -36,5 +38,6 @@ public class Suggestion
         Created_at = created_at;
         UserId = userId;
         DestinationId = destinationId;
+        ImageBase64 = imageBase64;
     }
 }

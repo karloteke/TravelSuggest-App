@@ -94,7 +94,8 @@ public class SuggestionController : ControllerBase
                 suggestionDto.Rating,
                 DateTime.UtcNow,
                 destinationId,
-                suggestionDto.UserId 
+                suggestionDto.UserId,
+                suggestionDto.ImageBase64
             );
 
             return Ok(new { message = $"Se ha creado correctamente la sugerencia para el destino con Id: {destinationId}" });

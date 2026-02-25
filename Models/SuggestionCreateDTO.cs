@@ -19,5 +19,7 @@ public class SuggestionCreateDTO
     [Required(ErrorMessage = "El ID del usuario es obligatorio.")]
     [Range(1, int.MaxValue, ErrorMessage = "El ID del usuario debe ser mayor que cero.")]
     public int UserId { get; set; }
+
+    public string? ImageBase64 { get; set; }
 }
 

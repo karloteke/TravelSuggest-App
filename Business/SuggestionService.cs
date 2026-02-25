@@ -13,7 +13,7 @@ namespace TravelSuggest.Business
         }
 
 
-        public void CreateSuggestion(string title, string description, decimal price, int rating, DateTime created_at, int destinationId, int userId)
+        public void CreateSuggestion(string title, string description, decimal price, int rating, DateTime created_at, int destinationId, int userId, string? imageBase64 = null)
         {
             // Verificar si el destino existe
             var destination = _repository.GetDestinationById(destinationId);
@@ -33,7 +33,7 @@ namespace TravelSuggest.Business
             }
 
             // Crear la sugerencia ya que el destino existe
-            var suggestion = new Suggestion(title, description, price, rating, created_at, userId, destinationId);
+            var suggestion = new Suggestion(title, description, price, rating, created_at, userId, destinationId, imageBase64);
 
             _repository.AddSuggestion(suggestion, userId);  // Agregar la sugerencia al repositorio
 
@@ -100,6 +100,7 @@ namespace TravelSuggest.Business
             suggestion.Description = suggestionUpdate.Description;
             suggestion.Price = suggestionUpdate.Price;
             suggestion.Rating = suggestionUpdate.Rating;
+            suggestion.ImageBase64 = suggestionUpdate.ImageBase64;
             _repository.UpdateSuggestion(suggestion, suggestionId );
             _repository.SaveChanges();
         }

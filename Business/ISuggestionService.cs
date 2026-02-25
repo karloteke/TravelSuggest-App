@@ -5,7 +5,7 @@ namespace TravelSuggest.Business
 {
     public interface ISuggestionService
     {
-        void CreateSuggestion(string title, string description, decimal price, int rating, DateTime created_at, int destinarionId, int userId);  
+        void CreateSuggestion(string title, string description, decimal price, int rating, DateTime created_at, int destinarionId, int userId, string? imageBase64 = null);  
         List<Suggestion> GetAllSuggestions();
         public Suggestion GetSuggestionById(int SuggestionId);
         public IEnumerable<Suggestion> GetAllSuggestions(SuggestionQueryParameters? SuggestionQueryParameters);

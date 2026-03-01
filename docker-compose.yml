@@ -24,6 +24,10 @@ services:
           dockerfile: API/Dockerfile
         depends_on:
             - db
+        environment:
+            - CONNECTION_STRING_NAME=ServerDB
+            - ConnectionStrings__ServerDB=Server=db;Database=TravelSuggestDB;Uid=sa;Pwd=${MSSQL_SA_PASSWORD};TrustServerCertificate=True
+            - ASPNETCORE_ENVIRONMENT=Production
         networks:
             - travelsuggestapp
     web:

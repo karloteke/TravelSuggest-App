@@ -87,9 +87,9 @@ builder.Services.AddSwaggerGen(c =>
 
 
  // Cadena de conexión BBDD
-var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
-// var connectionString = builder.Configuration.GetConnectionString("ServerAzure");
-// var connectionString = builder.Configuration.GetConnectionString("ServerDB");
+// Se puede cambiar con la variable de entorno CONNECTION_STRING_NAME (por defecto: ServerDB_localhost)
+var connectionStringName = Environment.GetEnvironmentVariable("CONNECTION_STRING_NAME") ?? "ServerDB_localhost";
+var connectionString = builder.Configuration.GetConnectionString(connectionStringName);
 
 builder.Services.AddDbContext<TravelSuggestContext>(options =>
     options.UseSqlServer(connectionString, sqlOptions =>
@@ -110,6 +110,29 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+// Aplicar migraciones automáticamente al arrancar (crea la BD y aplica seed data)
+// Reintenta varias veces porque SQL Server puede tardar en arrancar en Docker
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TravelSuggestContext>();
+    var retries = 10;
+    for (int i = 0; i < retries; i++)
+    {
+        try
+        {
+            dbContext.Database.Migrate();
+            Console.WriteLine("Migraciones aplicadas correctamente.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Intento {i + 1}/{retries} - Error conectando a la BD: {ex.Message}");
+            if (i == retries - 1) throw;
+            Thread.Sleep(5000); // Espera 5 segundos entre reintentos
+        }
+    }
+}
 
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();

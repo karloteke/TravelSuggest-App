@@ -140,6 +140,9 @@ namespace TravelSuggest.Data.Migrations
                     b.Property<int?>("DestinationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageBase64")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("Price")
                         .IsRequired()
                         .HasColumnType("decimal(18,2)");

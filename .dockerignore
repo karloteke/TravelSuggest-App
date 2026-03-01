@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/.vs/
+.env
+.env.example
+.git/
+.gitignore
+*.md
+API/appsettings.Local.json
